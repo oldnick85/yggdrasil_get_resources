@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "YGGDRASIL GET RESOURCES",
+            "type": "python",
+            "request": "launch",
+            "program": "yggdrasil_get_resources.py",
+            "args": [
+                "--filter", ""
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}
