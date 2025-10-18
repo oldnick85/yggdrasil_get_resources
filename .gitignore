@@ -1,5 +1,6 @@
 yggdrasil.conf
 yggdrasil-peers.json
+*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
