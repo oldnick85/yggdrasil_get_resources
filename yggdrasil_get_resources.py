@@ -138,18 +138,31 @@ def parse_services_file(file_path: str) -> dict:
                 
             # Special parsing for Tor bridges list items
             if name == "Tor bridges":
-                assert len(res_tree) >= 4
-                # Match Tor bridge list items with specific format
-                m = re.match(r"- `(\S*)\s?(\[[\da-f:]+\]:\d+) (.+)` operated by (.+)", line)
+                assert len(res_tree) >= 4  # Should be in list context
+                
+                # Match the entire line to extract content before and after "operated by"
+                # This regex captures everything between backticks and the operator
+                m = re.match(r"- (.+?) operated by (.+)", line)
                 if m:
-                    tor_bridge = {
-                        "prefix": m.group(1),
-                        "address": m.group(2),
-                        "postfix": m.group(3),
-                        "operated": m.group(4)
-                    }
-                    assert isinstance(res_tree[-1], list)
-                    res_tree[-1].append(tor_bridge)
+                    # Extract the main content (between backticks) and operator
+                    content_between_backticks = m.group(1)  # Contains addresses and parameters
+                    operator = m.group(2)  # Operator name
+
+                    address_parts = re.split(r'\s+or\s+', content_between_backticks)
+                    
+                    # Process each address part
+                    for address_part in address_parts:
+                        m = re.match(r"`(\S*)\s?(\[[\da-f:]+\]:\d+) (.+)`", address_part)
+                        if m:
+                            tor_bridge = {
+                                "prefix": m.group(1),
+                                "address": m.group(2),
+                                "postfix": m.group(3),
+                                "operated": operator
+                            }
+
+                            assert isinstance(res_tree[-1], list)
+                            res_tree[-1].append(tor_bridge)  # Add bridge to the current list
                     
     return resources
 
